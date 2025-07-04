@@ -1,0 +1,4 @@
+EmployeeID,FirstName,LastName,WorkEmail,MobileNumber,AnnualSalary,Department
+E001,Frank,Miller,frank.miller@work.com,+1234567893,95000,Engineering
+E002,Grace,Lee,grace.lee@work.com,+1234567894,88000,Marketing
+E003,Henry,Taylor,henry.taylor@work.com,+1234567895,92000,Sales

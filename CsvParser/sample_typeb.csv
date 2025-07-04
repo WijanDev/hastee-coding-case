@@ -1,0 +1,4 @@
+ID,Name,Surname,CorporateEmail,PersonalEmail,Salary
+EMP001,Alice,Brown,alice.brown@company.com,alice.personal@email.com,90000
+EMP002,Charlie,Davis,charlie.davis@company.com,,78000
+EMP003,Eve,Wilson,,eve.wilson@email.com,85000

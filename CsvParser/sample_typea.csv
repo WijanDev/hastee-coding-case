@@ -1,0 +1,4 @@
+CustomerID,Full Name,Email,Phone,Salary
+CUST001,John Doe,john.doe@email.com,+1234567890,75000
+CUST002,Jane Smith,jane.smith@email.com,+1234567891,82000
+CUST003,Bob Johnson,bob.johnson@email.com,+1234567892,65000
