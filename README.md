@@ -239,13 +239,100 @@ CsvParser/
 
 ### 🎯 Design Decisions Made
 
-1. **Generic Interfaces**: `IValidator<T>` and `ITransformer<T>` for reusability
-2. **Factory Pattern**: Centralized parser creation with registration support
-3. **Abstract Base Class**: Shared parsing logic with template method pattern
-4. **Immutable DTOs**: Records provide value-based equality and immutability
-5. **Comprehensive Error Handling**: Detailed error tracking with categorization
-6. **Shared Constants**: Organized constants prevent magic strings/numbers
-7. **Modern C# Features**: Leverages latest language features for cleaner code
+#### 1. **Generic Interfaces**: `IValidator<T>` and `ITransformer<T>`
+**Decision**: Use generic interfaces instead of concrete types
+**Arguments**:
+- **Reusability**: Can be implemented for different DTOs (CustomerDto, ProductDto, etc.)
+- **Type Safety**: Compile-time type checking prevents runtime errors
+- **Extensibility**: Easy to add new entity types without changing interface contracts
+- **Testability**: Can mock interfaces for unit testing
+- **Dependency Inversion**: Depends on abstractions, not concrete implementations
+
+#### 2. **Factory Pattern**: Centralized parser creation
+**Decision**: Use factory pattern for parser instantiation
+**Arguments**:
+- **Encapsulation**: Hides complex object creation logic
+- **Flexibility**: Easy to add new parser types without modifying existing code
+- **Registration System**: Runtime registration of new parsers
+- **Dependency Injection**: Centralized dependency management
+- **Configuration**: Can configure parsers based on external settings
+
+#### 3. **Abstract Base Class**: Template method pattern
+**Decision**: Use abstract base class instead of pure interface implementation
+**Arguments**:
+- **Code Reuse**: Common parsing logic shared across all parsers
+- **Consistency**: Enforces consistent parsing workflow
+- **Reduced Duplication**: Template method eliminates repetitive code
+- **Extensibility**: Subclasses can override specific steps while keeping structure
+- **Maintainability**: Changes to common logic only need to be made in one place
+
+#### 4. **Immutable DTOs**: Records instead of classes
+**Decision**: Use C# records for CustomerDto
+**Arguments**:
+- **Immutability**: Prevents accidental data modification after creation
+- **Value Semantics**: Natural equality comparison without custom implementation
+- **Thread Safety**: Immutable objects are inherently thread-safe
+- **Functional Programming**: Aligns with functional programming principles
+- **Performance**: Optimized for value-based scenarios
+- **Conciseness**: Less boilerplate code compared to traditional classes
+
+#### 5. **Comprehensive Error Handling**: Detailed error tracking
+**Decision**: Implement extensive error handling with categorization
+**Arguments**:
+- **Debugging**: Detailed error information helps identify issues quickly
+- **User Experience**: Clear error messages improve usability
+- **Graceful Degradation**: System continues processing despite individual errors
+- **Audit Trail**: Complete error history for compliance and monitoring
+- **Error Recovery**: Categorized errors enable targeted error handling strategies
+- **Reporting**: Structured error data supports automated reporting
+
+#### 6. **Shared Constants**: Organized constant management
+**Decision**: Extract all magic strings/numbers into organized constant files
+**Arguments**:
+- **Maintainability**: Single source of truth for all constants
+- **Refactoring Safety**: IDE can safely rename constants across the codebase
+- **Consistency**: Ensures consistent values across the application
+- **Documentation**: Constants serve as self-documenting code
+- **Localization**: Easy to replace constants with localized versions
+- **Type Safety**: Compile-time checking prevents typos
+
+#### 7. **Modern C# Features**: Latest language features
+**Decision**: Leverage C# 9+ features throughout the codebase
+**Arguments**:
+- **Performance**: Features like records and primary constructors are optimized
+- **Readability**: More expressive and concise code
+- **Safety**: Nullable reference types prevent null reference exceptions
+- **Productivity**: Less boilerplate code means faster development
+- **Future-Proof**: Aligns with Microsoft's direction for the language
+- **Best Practices**: Demonstrates modern C# development patterns
+
+#### 8. **Modular Architecture**: Separation by responsibility
+**Decision**: Organize code into modules (Parsing, Validation, Transformation, ErrorHandling)
+**Arguments**:
+- **Single Responsibility**: Each module has a clear, focused purpose
+- **Loose Coupling**: Modules can evolve independently
+- **High Cohesion**: Related functionality is grouped together
+- **Testability**: Each module can be tested in isolation
+- **Team Development**: Different developers can work on different modules
+- **Reusability**: Modules can be reused in other projects
+
+#### 9. **TryGetValue Pattern**: Dictionary access optimization
+**Decision**: Use TryGetValue instead of ContainsKey + indexer
+**Arguments**:
+- **Performance**: Single dictionary lookup instead of two
+- **Atomicity**: Eliminates race conditions in concurrent scenarios
+- **Cleaner Code**: More idiomatic and readable
+- **Error Prevention**: Avoids potential KeyNotFoundException
+- **Best Practice**: Recommended approach in C# documentation
+
+#### 10. **Primary Constructors**: Reduced boilerplate
+**Decision**: Use primary constructors for simple data containers
+**Arguments**:
+- **Conciseness**: Significantly reduces boilerplate code
+- **Readability**: Constructor parameters are immediately visible
+- **Immutability**: Natural fit for immutable objects
+- **Performance**: Optimized by the compiler
+- **Modern Approach**: Aligns with C# evolution toward more functional patterns
 
 ### 🔮 Future Enhancements
 
