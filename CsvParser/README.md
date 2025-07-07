@@ -266,6 +266,170 @@ public class CustomTransformer : ITransformer
 }
 ```
 
+## Testing
+
+### Testing Strategy
+
+The solution follows a comprehensive testing approach with unit tests organized to mirror the main project structure. All tests use xUnit framework and follow the **Given-When-Then** naming convention for clarity and maintainability.
+
+### Test Structure
+
+Tests are organized in the `Tests/CsvParser.UnitTests/` project with the following structure:
+
+```
+Tests/CsvParser.UnitTests/
+├── Models/
+│   └── CustomerDtoTests.cs          # Tests for CustomerDto properties and behavior
+├── Validation/
+│   └── Models/
+│       └── ValidationResultTests.cs # Tests for validation result creation and properties
+├── ErrorHandling/
+│   ├── Models/
+│   │   └── ParsingErrorTests.cs     # Tests for error model creation and properties
+│   └── Implementations/
+│       └── CsvErrorHandlerTests.cs  # Tests for error handling functionality
+└── Parsing/
+    └── Factories/
+        └── CsvParserFactoryTests.cs # Tests for factory pattern implementation
+```
+
+### Test Naming Convention
+
+All tests follow the **Given-When-Then** pattern for clear test intent:
+
+```csharp
+[Fact]
+public void Given_CreateCustomerDto_When_ValidDataProvided_Then_PropertiesSetCorrectly()
+{
+    // Arrange
+    var customerId = "CUST001";
+    var fullName = "John Doe";
+    var email = "john.doe@email.com";
+    var phone = "+1234567890";
+    var salary = 75000m;
+
+    // Act
+    var customer = new CustomerDto(customerId, fullName, email, phone, salary);
+
+    // Assert
+    Assert.Equal(customerId, customer.CustomerId);
+    Assert.Equal(fullName, customer.FullName);
+    Assert.Equal(email, customer.Email);
+    Assert.Equal(phone, customer.Phone);
+    Assert.Equal(salary, customer.Salary);
+}
+```
+
+### Test Categories
+
+#### 1. Model Tests
+- **Purpose**: Verify data models behave correctly
+- **Coverage**: Property assignment, validation, immutability
+- **Examples**: `CustomerDtoTests`, `ValidationResultTests`, `ParsingErrorTests`
+
+#### 2. Implementation Tests
+- **Purpose**: Test concrete implementations of interfaces
+- **Coverage**: Business logic, error handling, edge cases
+- **Examples**: `CsvErrorHandlerTests`
+
+#### 3. Factory Tests
+- **Purpose**: Verify factory pattern creates correct instances
+- **Coverage**: Parser creation, type validation, error scenarios
+- **Examples**: `CsvParserFactoryTests`
+
+### Test Examples
+
+#### CustomerDto Tests
+```csharp
+[Fact]
+public void Given_CreateCustomerDto_When_NullValuesProvided_Then_PropertiesSetToNull()
+{
+    // Arrange & Act
+    var customer = new CustomerDto(null, null, null, null, null);
+
+    // Assert
+    Assert.Null(customer.CustomerId);
+    Assert.Null(customer.FullName);
+    Assert.Null(customer.Email);
+    Assert.Null(customer.Phone);
+    Assert.Null(customer.Salary);
+}
+```
+
+#### ValidationResult Tests
+```csharp
+[Fact]
+public void Given_CreateValidationResult_When_ValidData_Then_IsValidTrue()
+{
+    // Arrange & Act
+    var result = new ValidationResult(true, "Success");
+
+    // Assert
+    Assert.True(result.IsValid);
+    Assert.Equal("Success", result.Message);
+}
+```
+
+#### Error Handling Tests
+```csharp
+[Fact]
+public void Given_AddError_When_ValidError_Then_ErrorAddedToCollection()
+{
+    // Arrange
+    var errorHandler = new CsvErrorHandler();
+    var error = new ParsingError(ErrorType.Validation, "Invalid email", 1, 2);
+
+    // Act
+    errorHandler.AddError(error);
+
+    // Assert
+    Assert.True(errorHandler.HasErrors());
+    Assert.Single(errorHandler.GetErrors());
+}
+```
+
+### Running Tests
+
+#### Run All Tests
+```bash
+dotnet test
+```
+
+#### Run Tests with Verbose Output
+```bash
+dotnet test --verbosity normal
+```
+
+#### Run Tests with Coverage (if coverage tool is installed)
+```bash
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+#### Run Specific Test Class
+```bash
+dotnet test --filter "FullyQualifiedName~CustomerDtoTests"
+```
+
+#### Run Tests in Parallel
+```bash
+dotnet test --maxcpucount:0
+```
+
+### Test Best Practices
+
+1. **Arrange-Act-Assert**: Clear separation of test phases
+2. **Descriptive Names**: Test names explain the scenario being tested
+3. **Single Responsibility**: Each test verifies one specific behavior
+4. **Edge Cases**: Tests include null values, empty strings, and boundary conditions
+5. **Mocking Ready**: Interface-based design enables easy mocking for integration tests
+
+### Future Test Enhancements
+
+- **Integration Tests**: Test complete parsing workflows
+- **Performance Tests**: Benchmark parsing performance with large files
+- **Property-Based Tests**: Use FsCheck for property-based testing
+- **Mutation Testing**: Verify test quality with mutation testing
+
 ## Running the Solution
 
 ### Building the Project
