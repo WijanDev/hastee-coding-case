@@ -1,5 +1,19 @@
 # Hastee CSV Parser Solution
 
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [🚀 Quick Start](#-quick-start)
+- [✨ Features](#-features)
+- [🎯 Key Design Decisions](#-key-design-decisions)
+- [🏗️ Architecture](#️-architecture)
+- [📁 Project Structure](#-project-structure)
+- [🔄 Basic Parsing Flow](#-basic-parsing-flow)
+- [💻 Usage Example](#-usage-example)
+- [🧪 Testing](#-testing)
+- [📄 Supported CSV Formats](#-supported-csv-formats)
+- [🔧 Extending the Solution](#-extending-the-solution)
+
 ## Overview
 
 This solution implements a flexible and extensible CSV parser using the **Factory Pattern** with dependency injection of interfaces. The design allows for parsing different CSV file formats while maintaining a common output structure.
@@ -112,47 +126,6 @@ dotnet test --maxcpucount:0
 ### 7. Shared Constants
 - **Why**: Centralized configuration and elimination of magic strings
 - **Benefit**: Maintainable code with consistent naming and values
-
-## 🎉 Benefits of This Design
-
-1. **Maintainability**: Clear separation of concerns and organized folder structure
-2. **Testability**: Interface-based design enables easy unit testing
-3. **Extensibility**: Easy to add new parser types and validation rules
-4. **Reusability**: Components can be reused across different parser types
-5. **Error Handling**: Comprehensive error tracking and reporting
-6. **Flexibility**: Supports various CSV formats with different field structures
-7. **Code Quality**: Modern C# features, consistent naming, and organized structure
-
-### ✅ Flexible and Extensible Design
-- Easy to add new parser types by implementing `BaseCsvParser`
-- Reusable validation, transformation, and error handling components
-- Factory pattern allows dynamic parser selection
-
-### ✅ Clean, Well-Structured Code
-- Clear separation of concerns with interfaces
-- Comprehensive error handling and reporting
-- Well-documented code with XML comments
-- Organized folder structure mirroring architectural layers
-
-### ✅ Robust Error Handling
-- Detailed error tracking with row/column information
-- Error categorization (Validation, Parsing, Transformation, Exception)
-- Comprehensive error reporting and summary
-
-### ✅ Data Validation
-- Single-cell validation for individual fields
-- Multi-cell validation for related fields
-- DTO-level validation after transformation
-
-### ✅ Data Transformation
-- Flexible mapping from different CSV formats to common DTO
-- Support for external data enrichment (API calls, database queries)
-- Priority logic for email fields (corporate vs personal)
-
-### ✅ Comprehensive Testing
-- Unit tests organized to mirror main project structure
-- Test naming convention: `Given{MethodName}_When{Condition}_Then{ExpectedResult}`
-- Full coverage of core components and edge cases
 
 ## 📁 Project Structure
 
@@ -450,36 +423,6 @@ public void Given_CreateCustomerDto_When_ValidDataProvided_Then_PropertiesSetCor
 }
 ```
 
-### Test Categories
-
-#### 1. Unit Tests
-- **Purpose**: Test individual components in isolation
-- **Coverage**: Models, interfaces, implementations, factories
-- **Current Tests**: `CustomerDtoTests`, `ValidationResultTests`, `ParsingErrorTests`, `CsvErrorHandlerTests`, `CsvParserFactoryTests`
-- **Scope**: Single class or method testing with mocked dependencies
-
-#### 2. Integration Tests
-- **Purpose**: Test complete parsing workflows with real dependencies
-- **Coverage**: End-to-end parsing scenarios, file I/O, error handling flows
-- **Implementation**: Would test complete parsing pipelines using actual CSV files
-- **Scope**: Multiple components working together, real file system operations
-- **Future Examples**:
-  - Complete TypeA/TypeB/TypeC parsing workflows
-  - Error handling across the entire pipeline
-  - File structure validation with real CSV files
-  - Performance testing with large datasets
-
-#### 3. Architecture Tests
-- **Purpose**: Verify architectural constraints and design patterns
-- **Coverage**: Dependency injection, interface contracts, design pattern compliance
-- **Implementation**: Would use tools like NetArchTest to enforce architectural rules
-- **Scope**: Solution-wide architectural validation
-- **Future Examples**:
-  - Verify all parsers inherit from BaseCsvParser
-  - Ensure interfaces are properly implemented
-  - Validate dependency injection patterns
-  - Check naming conventions and folder structure compliance
-
 ### Test Best Practices
 
 1. **Arrange-Act-Assert**: Clear separation of test phases
@@ -495,13 +438,3 @@ public void Given_CreateCustomerDto_When_ValidDataProvided_Then_PropertiesSetCor
 - **Performance Tests**: Benchmark parsing performance with large files
 - **Property-Based Tests**: Use FsCheck for property-based testing
 - **Mutation Testing**: Verify test quality with mutation testing
-
-## 🎉 Benefits of This Design
-
-1. **Maintainability**: Clear separation of concerns and organized folder structure
-2. **Testability**: Interface-based design enables easy unit testing
-3. **Extensibility**: Easy to add new parser types and validation rules
-4. **Reusability**: Components can be reused across different parser types
-5. **Error Handling**: Comprehensive error tracking and reporting
-6. **Flexibility**: Supports various CSV formats with different field structures
-7. **Code Quality**: Modern C# features, consistent naming, and organized structure
