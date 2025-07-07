@@ -1,4 +1,4 @@
-﻿namespace CsvParser.ErrorHandling.Interfaces;
+﻿namespace CsvParser.ErrorHandling.Models;
 
 public class ParsingError(int rowNumber, int? columnNumber, string errorMessage, ErrorType errorType)
 {

@@ -1,4 +1,4 @@
-﻿namespace CsvParser.ErrorHandling.Interfaces;
+﻿namespace CsvParser.ErrorHandling.Models;
 
 /// <summary>
 /// Types of errors that can occur during parsing

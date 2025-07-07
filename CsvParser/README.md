@@ -4,6 +4,73 @@
 
 This solution implements a flexible and extensible CSV parser using the **Factory Pattern** with dependency injection of interfaces. The design allows for parsing different CSV file formats while maintaining a common output structure.
 
+## Project Structure
+
+### Main Project (`CsvParser/`)
+
+```
+CsvParser/
+├── Models/
+│   └── CustomerDto.cs
+├── Validation/
+│   ├── Interfaces/
+│   │   └── IValidator.cs
+│   ├── Models/
+│   │   └── ValidationResult.cs
+│   └── Implementations/
+│       └── CustomerValidator.cs
+├── Transformation/
+│   ├── Interfaces/
+│   │   └── ITransformer.cs
+│   └── Implementations/
+│       └── CustomerTransformer.cs
+├── ErrorHandling/
+│   ├── Interfaces/
+│   │   └── IErrorHandler.cs
+│   ├── Models/
+│   │   ├── ParsingError.cs
+│   │   └── ErrorType.cs
+│   └── Implementations/
+│       └── CsvErrorHandler.cs
+├── Parsing/
+│   ├── Interfaces/
+│   │   └── ICsvParser.cs
+│   ├── Factories/
+│   │   └── CsvParserFactory.cs
+│   └── Implementations/
+│       ├── BaseCsvParser.cs
+│       ├── TypeAParser.cs
+│       ├── TypeBParser.cs
+│       └── TypeCParser.cs
+├── Shared/
+│   └── Constants/
+│       ├── FieldNames.cs
+│       ├── ValidationConstants.cs
+│       ├── ErrorMessages.cs
+│       ├── ParserTypes.cs
+│       └── ...
+└── Program.cs
+```
+
+### Test Project (`Tests/CsvParser.UnitTests/`)
+
+```
+Tests/CsvParser.UnitTests/
+├── Models/
+│   └── CustomerDtoTests.cs
+├── Validation/
+│   └── Models/
+│       └── ValidationResultTests.cs
+├── ErrorHandling/
+│   ├── Models/
+│   │   └── ParsingErrorTests.cs
+│   └── Implementations/
+│       └── CsvErrorHandlerTests.cs
+└── Parsing/
+    └── Factories/
+        └── CsvParserFactoryTests.cs
+```
+
 ## Architecture
 
 ### Design Patterns Used
@@ -14,14 +81,17 @@ This solution implements a flexible and extensible CSV parser using the **Factor
 
 ### Core Components
 
+#### Models
+- **`CustomerDto`**: Common Data Transfer Object for customer data
+- **`ValidationResult`**: Result of validation operations
+- **`ParsingError`**: Detailed error information with location and context
+- **`ErrorType`**: Enumeration of error categories (Validation, Parsing, Transformation, Exception)
+
 #### Interfaces
 - **`IValidator`**: Handles data validation (single-cell and multi-cell)
 - **`ITransformer`**: Transforms raw CSV data into common DTO format
 - **`IErrorHandler`**: Records and manages parsing errors
 - **`ICsvParser`**: Base interface for all CSV parsers
-
-#### Models
-- **`CustomerDto`**: Common Data Transfer Object for customer data
 
 #### Parsers
 - **`BaseCsvParser`**: Abstract base class with common parsing logic
@@ -37,6 +107,12 @@ This solution implements a flexible and extensible CSV parser using the **Factor
 #### Factory
 - **`CsvParserFactory`**: Creates parser instances based on type
 
+#### Shared Constants
+- **`FieldNames`**: Centralized field name constants organized by category
+- **`ValidationConstants`**: Validation rules and constraints
+- **`ErrorMessages`**: Standardized error messages
+- **`ParserTypes`**: Supported parser type constants
+
 ## Features
 
 ### ✅ Flexible and Extensible Design
@@ -48,6 +124,7 @@ This solution implements a flexible and extensible CSV parser using the **Factor
 - Clear separation of concerns with interfaces
 - Comprehensive error handling and reporting
 - Well-documented code with XML comments
+- Organized folder structure mirroring architectural layers
 
 ### ✅ Robust Error Handling
 - Detailed error tracking with row/column information
@@ -63,6 +140,11 @@ This solution implements a flexible and extensible CSV parser using the **Factor
 - Flexible mapping from different CSV formats to common DTO
 - Support for external data enrichment (API calls, database queries)
 - Priority logic for email fields (corporate vs personal)
+
+### ✅ Comprehensive Testing
+- Unit tests organized to mirror main project structure
+- Test naming convention: `Given{MethodName}_When{Condition}_Then{ExpectedResult}`
+- Full coverage of core components and edge cases
 
 ## Usage Example
 
@@ -131,6 +213,14 @@ E001, Frank, Miller, frank.miller@work.com, +1234567893, 95000, Engineering
 - **Why**: External data enrichment may require API calls
 - **Benefit**: Non-blocking operations for better performance
 
+### 6. Organized Folder Structure
+- **Why**: Clear separation between interfaces, implementations, models, and factories
+- **Benefit**: Easy navigation and maintenance, consistent with architectural patterns
+
+### 7. Shared Constants
+- **Why**: Centralized configuration and elimination of magic strings
+- **Benefit**: Maintainable code with consistent naming and values
+
 ## Extending the Solution
 
 ### Adding a New Parser Type
@@ -176,29 +266,37 @@ public class CustomTransformer : ITransformer
 }
 ```
 
-## Running the Demo
+## Running the Solution
 
-1. Build the project:
+### Building the Project
 ```bash
 dotnet build
 ```
 
-2. Run the demo:
+### Running the Demo
 ```bash
 dotnet run
 ```
 
 The demo will:
-- Create sample CSV files
-- Parse them using different parser types
+- Parse sample CSV files using different parser types
 - Demonstrate error handling with invalid data
 - Show error reports and summaries
 
+### Running Tests
+```bash
+dotnet test
+```
+
+Tests are organized to mirror the main project structure and follow the naming convention:
+- `Given{MethodName}_When{Condition}_Then{ExpectedResult}`
+
 ## Benefits of This Design
 
-1. **Maintainability**: Clear separation of concerns makes code easy to maintain
+1. **Maintainability**: Clear separation of concerns and organized folder structure
 2. **Testability**: Interface-based design enables easy unit testing
 3. **Extensibility**: Easy to add new parser types and validation rules
 4. **Reusability**: Components can be reused across different parser types
 5. **Error Handling**: Comprehensive error tracking and reporting
-6. **Flexibility**: Supports various CSV formats with different field structures 
+6. **Flexibility**: Supports various CSV formats with different field structures
+7. **Code Quality**: Modern C# features, consistent naming, and organized structure 

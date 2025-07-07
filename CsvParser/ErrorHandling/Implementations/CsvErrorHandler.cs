@@ -1,4 +1,5 @@
 using CsvParser.ErrorHandling.Interfaces;
+using CsvParser.ErrorHandling.Models;
 using CsvParser.Shared.Constants;
 using CsvParser.Validation.Models;
 

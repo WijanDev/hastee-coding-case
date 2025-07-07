@@ -1,3 +1,4 @@
+using CsvParser.ErrorHandling.Models;
 using CsvParser.Validation.Models;
 
 namespace CsvParser.ErrorHandling.Interfaces;
