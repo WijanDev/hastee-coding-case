@@ -452,71 +452,33 @@ public void Given_CreateCustomerDto_When_ValidDataProvided_Then_PropertiesSetCor
 
 ### Test Categories
 
-#### 1. Model Tests
-- **Purpose**: Verify data models behave correctly
-- **Coverage**: Property assignment, validation, immutability
-- **Examples**: `CustomerDtoTests`, `ValidationResultTests`, `ParsingErrorTests`
+#### 1. Unit Tests
+- **Purpose**: Test individual components in isolation
+- **Coverage**: Models, interfaces, implementations, factories
+- **Current Tests**: `CustomerDtoTests`, `ValidationResultTests`, `ParsingErrorTests`, `CsvErrorHandlerTests`, `CsvParserFactoryTests`
+- **Scope**: Single class or method testing with mocked dependencies
 
-#### 2. Implementation Tests
-- **Purpose**: Test concrete implementations of interfaces
-- **Coverage**: Business logic, error handling, edge cases
-- **Examples**: `CsvErrorHandlerTests`
+#### 2. Integration Tests
+- **Purpose**: Test complete parsing workflows with real dependencies
+- **Coverage**: End-to-end parsing scenarios, file I/O, error handling flows
+- **Implementation**: Would test complete parsing pipelines using actual CSV files
+- **Scope**: Multiple components working together, real file system operations
+- **Future Examples**:
+  - Complete TypeA/TypeB/TypeC parsing workflows
+  - Error handling across the entire pipeline
+  - File structure validation with real CSV files
+  - Performance testing with large datasets
 
-#### 3. Factory Tests
-- **Purpose**: Verify factory pattern creates correct instances
-- **Coverage**: Parser creation, type validation, error scenarios
-- **Examples**: `CsvParserFactoryTests`
-
-### Test Examples
-
-#### CustomerDto Tests
-```csharp
-[Fact]
-public void Given_CreateCustomerDto_When_NullValuesProvided_Then_PropertiesSetToNull()
-{
-    // Arrange & Act
-    var customer = new CustomerDto(null, null, null, null, null);
-
-    // Assert
-    Assert.Null(customer.CustomerId);
-    Assert.Null(customer.FullName);
-    Assert.Null(customer.Email);
-    Assert.Null(customer.Phone);
-    Assert.Null(customer.Salary);
-}
-```
-
-#### ValidationResult Tests
-```csharp
-[Fact]
-public void Given_CreateValidationResult_When_ValidData_Then_IsValidTrue()
-{
-    // Arrange & Act
-    var result = new ValidationResult(true, "Success");
-
-    // Assert
-    Assert.True(result.IsValid);
-    Assert.Equal("Success", result.Message);
-}
-```
-
-#### Error Handling Tests
-```csharp
-[Fact]
-public void Given_AddError_When_ValidError_Then_ErrorAddedToCollection()
-{
-    // Arrange
-    var errorHandler = new CsvErrorHandler();
-    var error = new ParsingError(ErrorType.Validation, "Invalid email", 1, 2);
-
-    // Act
-    errorHandler.AddError(error);
-
-    // Assert
-    Assert.True(errorHandler.HasErrors());
-    Assert.Single(errorHandler.GetErrors());
-}
-```
+#### 3. Architecture Tests
+- **Purpose**: Verify architectural constraints and design patterns
+- **Coverage**: Dependency injection, interface contracts, design pattern compliance
+- **Implementation**: Would use tools like NetArchTest to enforce architectural rules
+- **Scope**: Solution-wide architectural validation
+- **Future Examples**:
+  - Verify all parsers inherit from BaseCsvParser
+  - Ensure interfaces are properly implemented
+  - Validate dependency injection patterns
+  - Check naming conventions and folder structure compliance
 
 ### Test Best Practices
 
@@ -528,7 +490,8 @@ public void Given_AddError_When_ValidError_Then_ErrorAddedToCollection()
 
 ### Future Test Enhancements
 
-- **Integration Tests**: Test complete parsing workflows
+- **Integration Tests**: Test complete parsing workflows with real files
+- **Architecture Tests**: Enforce architectural constraints and patterns
 - **Performance Tests**: Benchmark parsing performance with large files
 - **Property-Based Tests**: Use FsCheck for property-based testing
 - **Mutation Testing**: Verify test quality with mutation testing
