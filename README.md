@@ -18,6 +18,8 @@
 
 This solution implements a flexible and extensible CSV parser using the **Factory Pattern** with dependency injection of interfaces. The design allows for parsing different CSV file formats while maintaining a common output structure.
 
+[↑ Go to top](#-table-of-contents)
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -64,6 +66,8 @@ dotnet test --filter "FullyQualifiedName~CustomerDtoTests"
 dotnet test --maxcpucount:0
 ```
 
+[↑ Go to top](#-table-of-contents)
+
 ## ✨ Features
 
 ### ✅ Flexible and Extensible Design
@@ -97,6 +101,8 @@ dotnet test --maxcpucount:0
 - Test naming convention: `Given{MethodName}_When{Condition}_Then{ExpectedResult}`
 - Full coverage of core components and edge cases
 
+[↑ Go to top](#-table-of-contents)
+
 ## 🎯 Key Design Decisions
 
 ### 1. Interface-Based Design
@@ -126,6 +132,52 @@ dotnet test --maxcpucount:0
 ### 7. Shared Constants
 - **Why**: Centralized configuration and elimination of magic strings
 - **Benefit**: Maintainable code with consistent naming and values
+
+[↑ Go to top](#-table-of-contents)
+
+## 🏗️ Architecture
+
+### Design Patterns Used
+
+1. **Factory Pattern**: `CsvParserFactory` creates different parser types based on the provided parser type string
+2. **Strategy Pattern**: Different parser implementations handle various CSV formats
+3. **Dependency Injection**: Interfaces are injected into parsers for validation, transformation, and error handling
+
+### Core Components
+
+#### Models
+- **`CustomerDto`**: Common Data Transfer Object for customer data
+- **`ValidationResult`**: Result of validation operations
+- **`ParsingError`**: Detailed error information with location and context
+- **`ErrorType`**: Enumeration of error categories (Validation, Parsing, Transformation, Exception)
+
+#### Interfaces
+- **`IValidator`**: Handles data validation (single-cell and multi-cell)
+- **`ITransformer`**: Transforms raw CSV data into common DTO format
+- **`IErrorHandler`**: Records and manages parsing errors
+- **`ICsvParser`**: Base interface for all CSV parsers
+
+#### Parsers
+- **`BaseCsvParser`**: Abstract base class with common parsing logic
+- **`TypeAParser`**: Handles CSV format: `CustomerID, Full Name, Email, Phone, Salary`
+- **`TypeBParser`**: Handles CSV format: `ID, Name, Surname, CorporateEmail, PersonalEmail, Salary`
+- **`TypeCParser`**: Handles CSV format: `EmployeeID, FirstName, LastName, WorkEmail, MobileNumber, AnnualSalary, Department`
+
+#### Implementations
+- **`CustomerValidator`**: Concrete validation implementation
+- **`CustomerTransformer`**: Concrete transformation implementation
+- **`CsvErrorHandler`**: Concrete error handling implementation
+
+#### Factory
+- **`CsvParserFactory`**: Creates parser instances based on type
+
+#### Shared Constants
+- **`FieldNames`**: Centralized field name constants organized by category
+- **`ValidationConstants`**: Validation rules and constraints
+- **`ErrorMessages`**: Standardized error messages
+- **`ParserTypes`**: Supported parser type constants
+
+[↑ Go to top](#-table-of-contents)
 
 ## 📁 Project Structure
 
@@ -194,6 +246,8 @@ Tests/CsvParser.UnitTests/
         └── CsvParserFactoryTests.cs
 ```
 
+[↑ Go to top](#-table-of-contents)
+
 ## 🔄 Basic Parsing Flow
 
 ```mermaid
@@ -237,47 +291,7 @@ flowchart TD
     style R fill:#ffcdd2
 ```
 
-## 🏗️ Architecture
-
-### Design Patterns Used
-
-1. **Factory Pattern**: `CsvParserFactory` creates different parser types based on the provided parser type string
-2. **Strategy Pattern**: Different parser implementations handle various CSV formats
-3. **Dependency Injection**: Interfaces are injected into parsers for validation, transformation, and error handling
-
-### Core Components
-
-#### Models
-- **`CustomerDto`**: Common Data Transfer Object for customer data
-- **`ValidationResult`**: Result of validation operations
-- **`ParsingError`**: Detailed error information with location and context
-- **`ErrorType`**: Enumeration of error categories (Validation, Parsing, Transformation, Exception)
-
-#### Interfaces
-- **`IValidator`**: Handles data validation (single-cell and multi-cell)
-- **`ITransformer`**: Transforms raw CSV data into common DTO format
-- **`IErrorHandler`**: Records and manages parsing errors
-- **`ICsvParser`**: Base interface for all CSV parsers
-
-#### Parsers
-- **`BaseCsvParser`**: Abstract base class with common parsing logic
-- **`TypeAParser`**: Handles CSV format: `CustomerID, Full Name, Email, Phone, Salary`
-- **`TypeBParser`**: Handles CSV format: `ID, Name, Surname, CorporateEmail, PersonalEmail, Salary`
-- **`TypeCParser`**: Handles CSV format: `EmployeeID, FirstName, LastName, WorkEmail, MobileNumber, AnnualSalary, Department`
-
-#### Implementations
-- **`CustomerValidator`**: Concrete validation implementation
-- **`CustomerTransformer`**: Concrete transformation implementation
-- **`CsvErrorHandler`**: Concrete error handling implementation
-
-#### Factory
-- **`CsvParserFactory`**: Creates parser instances based on type
-
-#### Shared Constants
-- **`FieldNames`**: Centralized field name constants organized by category
-- **`ValidationConstants`**: Validation rules and constraints
-- **`ErrorMessages`**: Standardized error messages
-- **`ParserTypes`**: Supported parser type constants
+[↑ Go to top](#-table-of-contents)
 
 ## 💻 Usage Example
 
@@ -304,70 +318,7 @@ if (errorHandler.HasErrors())
 }
 ```
 
-## 📄 Supported CSV Formats
-
-### TypeA Format
-```
-CustomerID, Full Name, Email, Phone, Salary
-CUST001, John Doe, john.doe@email.com, +1234567890, 75000
-```
-
-### TypeB Format
-```
-ID, Name, Surname, CorporateEmail, PersonalEmail, Salary
-EMP001, Alice, Brown, alice.brown@company.com, alice.personal@email.com, 90000
-```
-
-### TypeC Format
-```
-EmployeeID, FirstName, LastName, WorkEmail, MobileNumber, AnnualSalary, Department
-E001, Frank, Miller, frank.miller@work.com, +1234567893, 95000, Engineering
-```
-
-## 🔧 Extending the Solution
-
-### Adding a New Parser Type
-
-1. Create a new parser class inheriting from `BaseCsvParser`:
-```csharp
-public class NewTypeParser : BaseCsvParser
-{
-    public NewTypeParser(IValidator validator, ITransformer transformer, IErrorHandler errorHandler) 
-        : base(validator, transformer, errorHandler) { }
-    
-    public override string GetParserType() => "NewType";
-    
-    public override async Task<bool> ValidateFileStructureAsync(string filePath)
-    {
-        // Implement structure validation
-    }
-}
-```
-
-2. Register the new parser in the factory:
-```csharp
-factory.RegisterParserType("NewType", (v, t, e) => new NewTypeParser(v, t, e));
-```
-
-### Adding Custom Validation Rules
-
-Extend `CustomerValidator` or create a new validator implementing `IValidator`:
-```csharp
-public class CustomValidator : IValidator
-{
-    // Implement validation methods
-}
-```
-
-### Adding Custom Transformations
-
-Extend `CustomerTransformer` or create a new transformer implementing `ITransformer`:
-```csharp
-public class CustomTransformer : ITransformer
-{
-    // Implement transformation methods
-}
-```
+[↑ Go to top](#-table-of-contents)
 
 ## 🧪 Testing
 
@@ -438,3 +389,74 @@ public void Given_CreateCustomerDto_When_ValidDataProvided_Then_PropertiesSetCor
 - **Performance Tests**: Benchmark parsing performance with large files
 - **Property-Based Tests**: Use FsCheck for property-based testing
 - **Mutation Testing**: Verify test quality with mutation testing
+
+[↑ Go to top](#-table-of-contents)
+
+## 📄 Supported CSV Formats
+
+### TypeA Format
+```
+CustomerID, Full Name, Email, Phone, Salary
+CUST001, John Doe, john.doe@email.com, +1234567890, 75000
+```
+
+### TypeB Format
+```
+ID, Name, Surname, CorporateEmail, PersonalEmail, Salary
+EMP001, Alice, Brown, alice.brown@company.com, alice.personal@email.com, 90000
+```
+
+### TypeC Format
+```
+EmployeeID, FirstName, LastName, WorkEmail, MobileNumber, AnnualSalary, Department
+E001, Frank, Miller, frank.miller@work.com, +1234567893, 95000, Engineering
+```
+
+[↑ Go to top](#-table-of-contents)
+
+## 🔧 Extending the Solution
+
+### Adding a New Parser Type
+
+1. Create a new parser class inheriting from `BaseCsvParser`:
+```csharp
+public class NewTypeParser : BaseCsvParser
+{
+    public NewTypeParser(IValidator validator, ITransformer transformer, IErrorHandler errorHandler) 
+        : base(validator, transformer, errorHandler) { }
+    
+    public override string GetParserType() => "NewType";
+    
+    public override async Task<bool> ValidateFileStructureAsync(string filePath)
+    {
+        // Implement structure validation
+    }
+}
+```
+
+2. Register the new parser in the factory:
+```csharp
+factory.RegisterParserType("NewType", (v, t, e) => new NewTypeParser(v, t, e));
+```
+
+### Adding Custom Validation Rules
+
+Extend `CustomerValidator` or create a new validator implementing `IValidator`:
+```csharp
+public class CustomValidator : IValidator
+{
+    // Implement validation methods
+}
+```
+
+### Adding Custom Transformations
+
+Extend `CustomerTransformer` or create a new transformer implementing `ITransformer`:
+```csharp
+public class CustomTransformer : ITransformer
+{
+    // Implement transformation methods
+}
+```
+
+[↑ Go to top](#-table-of-contents)
